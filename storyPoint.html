@@ -1,0 +1,366 @@
+<head>
+	<title>ZEFR StoryPointer</title>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, minimal-ui">
+</head>
+
+<body>
+	{{#if currentUser}}
+        {{> dashboard}}
+        {{> serverStatus}}
+    {{else}}
+    	<img src="zefr.svg" style="width: 140px; margin: 0 auto; display: block;">
+    	{{> login}}
+        {{> register}}
+    {{/if}}
+</body>
+
+<template name="register">
+<style>
+	.register-form{
+		max-width: 320px;
+		margin: 0 auto;
+	}
+
+	.register-form input{
+		background: white;
+		border: none;
+		font-size; 16px;
+		width: 100%;
+		margin: 10px auto;
+		padding: 8px 12px;
+		border-radius: 8px;
+		outline: none;
+		border: 1px solid transparent;
+		transition: border-color .3s;
+		box-sizing: border-box;
+	}
+
+	.register-form input:focus{
+		border: 1px solid rgb(160, 255, 160);
+	}
+</style>
+<div class="register-form">
+<h3>New User?</h3>
+<form>
+    <input type="text" id="register-name" placeholder="Name...">
+    <input type="password" id="register-password" placeholder="Password...">
+    <input type="text" id="register-photo" placeholder="Avatar Image URL...">
+    <input type="submit" value="Register">
+</form>
+</div>
+</template>
+
+<template name="login">
+<style>
+	.login-form{
+		max-width: 320px;
+		margin: 0 auto;
+	}
+
+	.login-form input{
+		background: white;
+		border: none;
+		font-size; 16px;
+		width: 100%;
+		margin: 10px auto;
+		padding: 8px 12px;
+		border-radius: 8px;
+		outline: none;
+		border: 1px solid transparent;
+		transition: border-color .3s;
+		box-sizing: border-box;
+	}
+
+	.login-form input:focus{
+		border: 1px solid rgb(160, 255, 160);
+	}
+</style>
+<div class="login-form">
+<h3>Welcome Back</h3>
+<form>
+    <input type="text" id="login-name" placeholder="Name...">
+    <input type="password" id="login-password" placeholder="Password...">
+    <input type="submit" value="Login">
+</form>
+</div>
+</template>
+
+<template name="dashboard">
+	<style>
+		.navbar{
+			width: 100%;
+			height: 80px;
+			background: #f0f0f0;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 9999
+		}
+
+		.navbar >input{
+			float: right;
+			background: #D3DBE0;
+			border: none;
+			height: 40px;
+			border-radius: 120px;
+			text-align: center;
+			margin-right: 20px;
+			margin-top: 18px;
+			font-size: 16px;
+			width: 100px;
+			outline: none;
+			color: #6E6E6E;
+
+		}
+
+		.navbar >input::-moz-placeholder { /* Firefox 18- */
+		   color: #A4ACBD;
+		}
+
+		.navbar >input::-webkit-input-placeholder {
+		   color: #A4ACBD;
+		}
+
+
+
+		.logo{
+			width: 70px;
+			height: 44px;
+			background-image: url('zefr.svg');
+			background-size: cover;
+			margin-left: 20px;
+			margin-top: 20px;
+			display: inline-block;
+		}
+
+		h1{
+			display: inline-block;
+			color: #6E6E6E;
+			font-weight: 200;
+			margin: 0;
+			position: relative;
+			top: -12px;
+			left: 20px;
+		}
+
+		@media screen and (max-width: 800px){
+			h1{
+				display: none;
+			}
+		}
+
+		.avatar{
+			width: 40px;
+			height: 40px;
+			background-size: cover;
+			background-color: rgba(0,0,0,0.6);
+			background-repeat: no-repeat;
+			border-radius: 40px;
+			background-image: url({{currentUser.profile.avatur_url}});
+			float: right;
+			margin-top: 18px;
+			margin-right: 20px;
+		}
+
+		.logout{
+			float: right;
+			display: block;
+			box-sizing: border-box;
+			height: 40px;
+			width: 120px;
+			background: #FF6161;
+			text-transform: uppercase;
+			text-align: center;
+			border-radius: 120px;
+			color: white;
+			text-decoration: none;
+			font-weight: 200;
+			padding-top: 11px;
+			margin-top: 18px;
+			margin-right: 20px;
+			transition: background .2s;
+		}
+
+		.logout:hover{
+			background: #FB2A2A;
+		}
+	</style>
+	<nav class="navbar">
+		<div class="logo"></div>
+		<h1>Story Pointer</h1>
+		<a href="#" class="logout">Logout</a>
+		<div class="avatar"></div>
+		<input id="current-vote" type="text" placeholder="estimate" value="{{currentUser.profile.current_vote}}">
+    </nav>
+</template>
+
+<template name="serverStatus">
+	<style>
+		.public-avatar{
+			width: 170px;
+			height: 170px;
+			background-size: cover;
+			background-repeat: no-repeat;
+			border-radius: 10px;
+			background-image: url({{this.profile.avatur_url}});
+			background-color: rgba(0,0,0,0.6);
+			margin: 0 auto;
+			position: relative;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+			transform: translate3d(0,0,0);
+		}
+
+		.name{
+			width: 100%;
+			text-align: center;
+			background: white;
+			height: 40px;
+			z-index: 4;
+			position: relative;
+			top: -16px;
+			padding-top: 10px;
+			box-sizing: border-box;
+			color: #6E6E6E;
+		}
+
+		.name::after{
+			content: '';
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			height: 5px;
+			background: rgb(160, 255, 160);
+			left: 0;
+			transform: translate3d(0,0,0) scaleX(0.001);
+			transition: transform .3s;
+		}
+
+		.name.voted::after{
+			transform: translate3d(0,0,0) scaleX(1);
+		}
+
+		.public-vote{
+			position: absolute;
+			top: -40px;
+			right: -14px;
+			width: 50px;
+			height: 50px;
+			background: #FF6161;
+			color: white;
+			font-weight: 100;
+			text-align: center;
+			box-sizing: border-box;
+			padding-top: 11px;
+			font-size: 24px;
+			text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+			border-radius: 60px;
+			transform: translate3d(0,0,0) scale(0.001);
+			transition: transform .3s;
+			box-shadow: 0px 2px 2px rgba(0,0,0,0.1)
+		}
+
+		.public-vote.visible{
+			transform: translate3d(0,0,0) scale(1);
+		}
+
+		.hidden{
+			transform: translate3d(0,0,0) scale(0.001);
+		}
+		.deck{
+			max-width: 1400px;
+			width: 94%;
+			margin: 0 auto;
+			height: auto;
+			position: absolute;
+			top: 50%;
+			left: 0;
+			right: 0;
+			transform: translate3d(0,-50%,0);
+			text-align: center;
+			padding-bottom: 80px;
+			padding-top: 80px;
+		}
+
+
+		.user-card{
+			width: 170px;
+			height: 210px;
+			display: inline-block;
+			position: relative;
+			margin: 40px;
+		}
+
+		.ribbon {
+		   width: 150px;
+		   height: 30px;
+		   position: absolute;
+		   left: 0;
+		   right: 0;
+		   margin: 0 auto;
+		   text-align: center;
+		   font-size: 19px!important;
+		   font-family: 'Helvetica Neue',Helvetica, sans-serif;
+		   z-index: 2;
+		   }
+		.ribbon:before, .ribbon:after {
+		   content: '';
+		   position: absolute;
+		   display: block;
+		   bottom: -1em;
+		   border: 0.9em solid #f8f8f8;
+		   }
+		.ribbon:before {
+		   left: -2em;
+		   border-right-width: 1.5em;
+		   border-left-color: transparent;
+		   -webkit-box-shadow: rgba(000,000,000,0.4) 0px 0px 0px;
+		   -moz-box-shadow: rgba(000,000,000,0.4) 0px 0px 0px;
+		   box-shadow: rgba(000,000,000,0.4) 0px 0px 0px;
+		   }
+		.ribbon:after {
+		   right: -2em;
+		   border-left-width: 1.5em;
+		   border-right-color: transparent;
+		   -webkit-box-shadow: rgba(000,000,000,0.4) -0px 0px 0px;
+		   -moz-box-shadow: rgba(000,000,000,0.4) -0px 0px 0px;
+		   box-shadow: rgba(000,000,000,0.4) -0px 0px 0px;
+		   }
+		.ribbon .ribbon-content:before, .ribbon .ribbon-content:after {
+		   border-color: rgba(0,0,0,0.15) transparent transparent transparent;
+		   position: absolute;
+		   display: block;
+		   border-style: solid;
+		   bottom: -1em;
+		   content: '';
+		   z-index: 1;
+		   }
+		.ribbon .ribbon-content:before {
+		   left: -10px;
+		   border-width: 0.5em 0 0 0.9em;
+		   }
+		.ribbon .ribbon-content:after {
+		   right: -10px;
+		   border-width: 0.5em 0.9em 0 0;
+		   }
+
+		   .hasVoted{
+		   	pointer-events: none;
+		   	opacity: 0;
+		   }
+	</style>
+	<div class="deck">
+    {{#each users}}
+    	{{#if status.online}}
+    	<div class="user-card">
+			<div class="public-avatar" style="background-image: url('{{profile.avatur_url}}')"></div>
+			<div class="ribbon">
+				<strong class="ribbon-content"></strong>
+			</div>
+		    <p class="name {{#if profile.vote_ready}}voted{{/if}}">{{username}}</p>
+		    <p class="public-vote" {{allVoted}}>{{profile.current_vote}}</p>
+        </div>
+        {{/if}}
+    {{/each}}
+    </div>
+</template>
